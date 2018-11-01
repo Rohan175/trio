@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 
+import EmailIcon from '@material-ui/icons/Email/';
+import PhoneIcon from '@material-ui/icons/LocalPhone/';
 // import Toolbar from '@material-ui/core/Toolbar';
 // import Drawer from '@material-ui/core/Drawer';
 import Typography from '@material-ui/core/Typography';
@@ -16,17 +18,28 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 // import IconButton from '@material-ui/core/IconButton';
 
-import TeacherImage from './images/training.svg';
-import AboutUsImage from './images/about-us.svg';
+import TeacherImage from './images/working.svg';
+// import AboutUsImage from './images/about-us.svg';
 import HomeImage from './images/house.svg';
-import GroupImage from './images/group.svg';
+import GroupImage from './images/networking.svg';
+
+import Premium from './images/premium.svg';
+import Repeat from './images/repeat.svg';
+import Chat from './images/chat.svg';
+import Bicycle from './images/bicycle.svg';
+
+import AboutUsImage from './images/students.svg'
+
 import Facebook from './images/facebook.svg';
 import Instagram from './images/instagram.svg';
 import Linkedin from './images/linkedin.svg';
 import Youtube from './images/youtube.svg';
 import Twitter from './images/twitter.svg';
 
+// import {  } from "./images/";
+
 import SearchBar from './components/SearchBar';
+import Contact from './components/Contact';
 
 const styles = (theme) => ({
     root: {
@@ -34,8 +47,9 @@ const styles = (theme) => ({
     },
     searchBlock: {
         paddingTop: '100px',
+        paddingBottom:  '70px',
         display: 'flex',
-        height: '550px',
+        height: '400px',
         background: '#006972',
         // background: "linear-gradient(to left, #006972 0%,#008080 100%,#008080 100%)",
         // background: `url(${backgroundImage})`,
@@ -47,36 +61,54 @@ const styles = (theme) => ({
         [theme.breakpoints.up('md')]: {
             // height: '100vh',
             width: '100vw',
+            paddingBottom: '0px'
         },
     },
     trioIntroBlock: {
         textAlign: 'center',
-        paddingTop: '160px',
+        paddingTop: '90px',
         [theme.breakpoints.up('md')]: {
             paddingLeft: '100px',
             paddingRight: '100px'
         },
     },
+    pageGrid: {
+        alignItems: 'stretch',
+        [theme.breakpoints.up('sm')]: {
+            display: 'flex'
+        },
+    },
     trioTextBlock: {
         padding: '20px',
-        height: '300px',
+        // height: '300px',
         width: '100%',
         display: 'flex',
-        textAlign: 'left'
+        textAlign: 'left',
+        order: 2,
+        [theme.breakpoints.up('sm')]: {
+            order: 1,
+        },
     },
     trioImageBlock: {
         padding: '20px',
         // height: '300px',
         width: '100%',
         display: 'flex',
-        textAlign: 'center'
+        textAlign: 'center',
+        order: 1,
+        [theme.breakpoints.up('sm')]: {
+            order: 2,
+        },
     },
     cardsBlock: {
+        // background: '#006972',
         paddingTop: '60px',
+        paddingBottom: '0px',
         textAlign: 'center',
         [theme.breakpoints.up('md')]: {
             paddingLeft: '100px',
-            paddingRight: '100px'
+            paddingRight: '100px',
+            paddingBottom: '0px'
         },
     },
     cardsContainer: {
@@ -87,10 +119,10 @@ const styles = (theme) => ({
     },
     cardWrapper: {
         padding: '20px',
-        height: '300px',
+        // minHeight: '300px',
         width: '100%',
         display: 'flex',
-        textAlign: 'center',
+        textAlign: 'center'
     },
     cards: {
         margin: 'auto'
@@ -112,7 +144,13 @@ const styles = (theme) => ({
         },
     },
     textField: {
-        width: "100%"
+        width: "100%",
+        // marginTop: '10px',
+        // borderRadius:'4px',
+        // padding: '10px',
+        // paddingBottom: '10px',
+        // border: '1px solid gray',
+        // background: "linear-gradient(to left, #006972 0%,#008080 100%,#008080 100%)",
     },
     Button: {
         width: "100%",
@@ -129,7 +167,12 @@ const styles = (theme) => ({
     },
     socialIcons: {
         width: "40px",
-        padding: '10px'
+        padding: '10px',
+    },
+    socialIconDiv: {
+        [theme.breakpoints.down('md')]: {
+            padding: '40px'
+        },
     },
     content: {
         margin: 'auto',
@@ -148,6 +191,24 @@ const styles = (theme) => ({
         borderRadius: '4px',
         border: 'none'
     },
+    trioFeatureBlock: {
+        paddingTop: '60px',
+        paddingBottom: '60px',
+        textAlign: 'center',
+        [theme.breakpoints.up('md')]: {
+            paddingLeft: '100px',
+            paddingRight: '100px',
+            paddingBottom: '0px'
+        },
+    },
+    trioFeatureGridBlock: {
+        textAlign: 'center',
+        display: 'flex'
+    },
+    trioFeatureCard: {
+        padding: '60px',
+        margin: 'auto'
+    },
     navBarMenuDesktop: {
         [theme.breakpoints.down('xs')]: {
             display: 'none',
@@ -159,11 +220,18 @@ const styles = (theme) => ({
         },
     },
     skew: {
-        width: '100%',
-        height: '100px',
-        position: 'absolute',
-        left: '0px',
+        // width: '100%',
+        height: '70px',
+        // paddingTop: '100px',
+        // position: 'absolute',
         background: 'linear-gradient(to right bottom, #006972 49%, #FFF 50%)'
+    },
+    skew2: {
+        // width: '100%',
+        height: '70px',
+        // paddingTop: '100px',
+        // position: 'absolute',
+        background: 'linear-gradient(to right top, #006972 49%, #FFF 50%)'
     }
 })
 
@@ -180,6 +248,11 @@ class Home extends Component {
             [name]: event.target.value,
         });
     };
+
+    handleFetch(obj){
+        console.log('home');
+        console.log(obj);
+    }
 
     componentDidMount = () => {
         scrollToComponent(this.searchBlock, { offset: 0, align: 'middle', duration: 500, ease:'inCirc'});
@@ -198,7 +271,7 @@ class Home extends Component {
             <div className={classes.root}>
                 <div className={classes.searchBlock} ref={(section) => { setRef('searchBlock', section); }}>
                     <div className={classes.content}>
-                        <Typography variant="display1" style={{color: 'white', marginBottom : '75px'}}>SEARCH FOR TUTOR</Typography>
+                        <Typography variant="display1" style={{color: 'white'}}>SEARCH FOR TUTOR</Typography>
                         <SearchBar />
                     </div>  
                 </div>
@@ -209,22 +282,23 @@ class Home extends Component {
                             <Typography variant="display1">What is Trio?</Typography>
                         </Grid>
                         <Grid item xs={12}>
-                            <Grid container>
+                            <Grid container className={classes.pageGrid}>
                                 <Grid item sm className={classes.trioImageBlock}>
                                     <div style={{margin: 'auto'}}>
-                                        <img alt="" src={TeacherImage} style={{width: '100%'}} />
+                                        <img alt="" src={TeacherImage} style={{width: '70%'}} />
                                     </div>
                                 </Grid>
                                 <Grid item sm className={classes.trioTextBlock}>
                                     <div style={{margin: 'auto'}}>
-                                        <Typography variant="h6">Basically Trio is an institution <br />which provides good teachers to students, <br />Home tutions or Group tutions as per your choice.</Typography>
-                                        <Typography variant="h6">With Trio there is no need to browse <br />through endless profiles, hassle and haggle.</Typography>
+                                        <Typography variant="subtitle1">Basically Trio is an institution <br />which provides good teachers to students, <br />Home tutions or Group tutions as per your choice.</Typography>
+                                        <Typography variant="subtitle1">With Trio there is no need to browse <br />through endless profiles, hassle and haggle.</Typography>
                                     </div>
                                 </Grid>
                             </Grid>
                         </Grid>
                     </Grid>  
                 </div>
+                {/* <div className={classes.skew2}></div> */}
                 <div className={classes.cardsBlock}>
                     <Grid container>
                         <Grid item xs={12} style={{paddingBottom: '30px'}}>
@@ -258,27 +332,72 @@ class Home extends Component {
                         </Grid>
                     </Grid> 
                 </div>
-                <div className={classes.trioAboutBlock} ref={(section) => { setRef('trioAboutBlock', section); }}>
+                {/* <div className={classes.skew}></div> */}
+                <div className={classes.trioFeatureBlock} ref={(section) => { setRef('trioAboutBlock', section); }}>
                     <Grid container>
                         <Grid item xs={12} style={{paddingBottom: '20px'}}>
+                            <Typography variant="display1">What we offer?</Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Grid container className={classes.trioFeatureGridBlock}>
+                                    <Grid item xs>
+                                        <Grid container>
+                                            <Grid item sm={12} md={6} lg className={classes.trioFeatureCard}>
+                                                <img alt="" src={Premium} style={{width: '100px'}} />
+                                                <br /><br />
+                                                <Typography variant="subheading">High Quality Teaching</Typography>
+                                            </Grid>
+                                            <Grid item sm={12} md={6} lg className={classes.trioFeatureCard}>
+                                                <img alt="" src={Repeat} style={{width: '100px'}} />
+                                                <br /><br />
+                                                <Typography variant="subheading">Replacement Guarantee</Typography>
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
+                                    <Grid item xs>
+                                        <Grid container>
+                                            <Grid item sm={12} md={6} lg className={classes.trioFeatureCard}>
+                                                <img alt="" src={Chat} style={{width: '100px'}} /> 
+                                                <br /><br />
+                                                <Typography variant="subheading">Feedback Every Month</Typography>  
+                                            </Grid>
+                                            <Grid item sm={12} md={6} lg className={classes.trioFeatureCard}>
+                                                <img alt="" src={Bicycle} style={{width: '100px'}} />
+                                                <br /><br />
+                                                <Typography variant="subheading">Fun Activities</Typography>
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
+                            </Grid>
+                        </Grid>
+                    </Grid>  
+                </div>
+                <div className={classes.contactBlock} style={{paddingBottom: '70px'}} ref={(section) => { setRef('contactBlock', section); }}>
+                    <Grid container>
+                        <Grid item xs={12} style={{paddingBottom: '30px'}}>
                             <Typography variant="display1">About Us</Typography>
                         </Grid>
                         <Grid item xs={12}>
                             <Grid container>
-                                <Grid item sm className={classes.trioImageBlock}>
+                                <Grid item sm xs={12} className={classes.cardWrapper}>
                                     <div style={{margin: 'auto'}}>
-                                        <img alt="" src={AboutUsImage} style={{width: '100%'}} />
+                                        <img alt="" src={AboutUsImage} style={{width: '70%'}} />
                                     </div>
                                 </Grid>
-                                <Grid item sm className={classes.trioTextBlock}>
-                                    <div style={{margin: 'auto'}}>
-                                        <Typography variant="h6">Basically Trio is an institution <br />which provides good teachers to students, <br />Home tutions or Group tutions as per your choice.</Typography>
-                                        <Typography variant="h6">With Trio there is no need to browse <br />through endless profiles, hassle and haggle.</Typography>
+                                <Grid item sm xs={12} className={classes.cardWrapper}>
+                                    <div style={{margin: 'auto', textAlign: 'left'}}>
+                                        <Typography variant="subtitle1"><span role="img" aria-labelledby="jsx-a11y/accessible-emoji">👉</span> Trio teachers are concentrating quality of teaching and proper guidance for students.</Typography>
+                                        <Typography variant="subtitle1"><span role="img" aria-labelledby="jsx-a11y/accessible-emoji">👉</span> Our teachers will teach academic and soft skills so students can understand the social responsibilities</Typography>
+                                        <Typography variant="subtitle1"><span role="img" aria-labelledby="jsx-a11y/accessible-emoji">👉</span> Idea of trio teachers is came from end the professionalism.</Typography>
+                                        <Typography variant="subtitle1"><span role="img" aria-labelledby="jsx-a11y/accessible-emoji">👉</span> So we at trioteachers are trying to unwind the difficulties of getting a  tutor which is according to your expectations and exceed most of them. We are trying to deliver the best anyone could get in form of art, education, sports, yoga any category you name it.</Typography>
+                                        <Typography variant="subtitle1"><span role="img" aria-labelledby="jsx-a11y/accessible-emoji">👉</span> This team is not only specialized in curricuars but also in co curriculars that will ensure the overall development of your child and will help them to rise to great heigts.</Typography>
+                                        <Typography variant="subtitle1"><span role="img" aria-labelledby="jsx-a11y/accessible-emoji">👉</span> We at triotutors have highly trained professionals that will focus on bringing the best of your child.</Typography>
+                                        <Typography variant="subtitle1"><span role="img" aria-labelledby="jsx-a11y/accessible-emoji">👉</span> This not only gives you an edge over other tutors but provides you with an essurance of a personalized academic support.</Typography>
                                     </div>
                                 </Grid>
                             </Grid>
                         </Grid>
-                    </Grid>  
+                    </Grid>
                 </div>
                 <div className={classes.contactBlock} ref={(section) => { setRef('contactBlock', section); }}>
                     <Grid container>
@@ -287,60 +406,65 @@ class Home extends Component {
                         </Grid>
                         <Grid item xs={12}>
                             <Grid container>
-                                <Grid item sm xs={12} className={classes.cardWrapper}>
-                                    <div className={classes.cards} style={{textAlign: 'left', width: '300px'}}>
+                                <Grid item sm={4} xs={12} className={classes.cardWrapper}>
+                                    <div className={classes.cards} >
                                         <Typography variant="title">Trio Teachers</Typography>
                                         <br />
                                         <Typography variant="body1">
                                             202, <br />Sahajanand Complex, <br />Near Unique Group Tution, <br />New C. G. Road, <br />Chandkheda, <br />Ahmedabad 382424
                                         </Typography>
-                                        <br />
-                                        <Typography variant="body1">
-                                            8487999309
-                                        </Typography>
-                                        <Typography variant="body1">
-                                            trio.education.100@gmail.com
-                                        </Typography>
                                     </div>
                                 </Grid>
-                                <Grid item sm xs={12} className={classes.cardWrapper}>
-                                    <div className={classes.cards}>
-                                        <TextField
-                                            id="email"
-                                            label="Email"
-                                            className={classes.textField}
-                                            value={this.state.email}
-                                            onChange={this.handleChange('email')}
-                                            margin="normal" />
+                                <Grid item sm={4} xs={12} className={classes.cardWrapper}>
+                                        <div className={classes.cards}>
 
-                                        <TextField
-                                            id="desc"
-                                            label="Description"
-                                            multiline
-                                            rows="4"
-                                            className={classes.textField}
-                                            value={this.state.description}
-                                            onChange={this.handleChange('description')}
-                                            margin="normal" />
-                                        <br /><br />
-                                        <Button variant="raised" className={classes.Button}>Send</Button>
-                                    </div>
+                                            <div style={{display : 'flex',marginBottom :'15px'}}>
+                                                <PhoneIcon />
+                                                <Typography style={{marginLeft : '10px'}} variant="body1">
+                                                    8487999309
+                                                </Typography>
+                                            </div>
+                                            
+                                            <div style={{display : 'flex',marginBottom :'15px'}}>
+                                                <PhoneIcon />
+                                                <Typography style={{marginLeft : '10px'}} variant="body1">
+                                                    7016373618
+                                                </Typography>
+                                            </div>
+                                            
+                                            <div style={{display : 'flex',marginBottom :'15px'}}>
+                                                <EmailIcon />
+                                                <Typography style={{marginLeft : '10px'}} variant="body1">
+                                                trio.education.100@gmail.com
+                                                </Typography>
+                                            </div>
+                                            
+                                            <a href="https://m.facebook.com/Trio-Teachers-364527030757298/?ref=bookmarks" target="blank"><img alt="" src={Facebook} className={classes.socialIcons} /></a>
+                                            <a href="https://twitter.com/TeachersTrio?s=08" target="blank"><img alt="" src={Twitter} className={classes.socialIcons} /></a>
+                                            <a href="https://www.instagram.com/p/BpUO8m4Beqc/?utm_source=ig_share_sheet&igshid=95t9iwk79hei" target="blank"><img alt="" src={Instagram} className={classes.socialIcons} /></a>
+                                            {/* <a href="http://google.com" target="blank"><img alt="" src={Youtube} className={classes.socialIcons} /></a> */}
+                                            <a href="http://google.com" target="blank"><img alt="" src={Linkedin} className={classes.socialIcons} /></a>
+                                        </div>
+
+                                </Grid>
+                                <Grid item sm={4} xs={12} className={classes.cardWrapper}>
+                                                <Contact handleFetch = {this.handleFetch.bind(this)}/>
                                 </Grid>
                             </Grid>
                         </Grid>
                     </Grid>
                 </div>
-                <div className={classes.footer}>
+                {/* <div className={classes.footer}>
                     <Grid container>
                         <Grid item xs={12} style={{paddingBottom: '30px'}}>
-                            <a href="http://google.com" target="blank"><img alt="" src={Facebook} className={classes.socialIcons} /></a>
+                            <a href="https://m.facebook.com/Trio-Teachers-364527030757298/?ref=bookmarks" target="blank"><img alt="" src={Facebook} className={classes.socialIcons} /></a>
                             <a href="https://twitter.com/TeachersTrio?s=08" target="blank"><img alt="" src={Twitter} className={classes.socialIcons} /></a>
                             <a href="https://www.instagram.com/p/BpUO8m4Beqc/?utm_source=ig_share_sheet&igshid=95t9iwk79hei" target="blank"><img alt="" src={Instagram} className={classes.socialIcons} /></a>
                             <a href="http://google.com" target="blank"><img alt="" src={Youtube} className={classes.socialIcons} /></a>
                             <a href="http://google.com" target="blank"><img alt="" src={Linkedin} className={classes.socialIcons} /></a>
                         </Grid>
                     </Grid>
-                </div>
+                </div> */}
             </div>
         );
     }

@@ -1,77 +1,34 @@
 import React, { Component }  from 'react';
-import PropTypes from 'prop-types';
-import classNames from 'classnames';
-import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
-import CameraIcon from '@material-ui/icons/PhotoCamera';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Grid from '@material-ui/core/Grid';
-import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import SearchSelectors from './components/SearchBar';
 
-import { withStyles } from '@material-ui/core/styles';
-
-const styles = theme => ({ icon: {
-    marginRight: theme.spacing.unit * 2,
-},
-heroUnit: {
-    backgroundColor: theme.palette.background.paper,
-    marginTop: '20px'
-},
-heroContent: {
-    maxWidth: 600,
-    margin: '0 auto',
-    padding: `${theme.spacing.unit * 8}px 0 ${theme.spacing.unit * 6}px`,
-},
-heroButtons: {
-    // marginTop: theme.spacing.unit * 4,
-    textAlign: 'center'
-},
-textField: {
-    width: '100%'
-},
-layout: {
-    width: 'auto',
-    [theme.breakpoints.up('md')]: {
-        marginRight: '100px',
-        marginLeft: '100px'
-    },
-},
-cardGrid: {
-    padding: `${theme.spacing.unit * 8}px 0`,
-},
-card: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-},
-cardMedia: {
-    paddingTop: '56.25%', // 16:9
-    height : '250px',
-},
-cardContent: {
-    flexGrow: 1,
-},
-footer: {
-    backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing.unit * 6,
-},
-});
+import './search.css';
 
 const TeacherCards = [  {id:1,name:"Suraj1",subject:"Chemistry",imageUrl:"https://i.pinimg.com/originals/a5/ce/7c/a5ce7cb72cd19f4f7e66858037f4af42.jpg",},
-                        {id:2,name:"Suraj2",subject:"Physics",imageUrl:""},
-                        {id:3,name:"Suraj3",subject:"Biology",imageUrl:""},
-                        {id:4,name:"Suraj4",subject:"Physics",imageUrl:""},
-                        {id:5,name:"Suraj5",subject:"English",imageUrl:""}  ];
+                        {id:2,name:"Suraj2",subject:"Physics",imageUrl:"https://i.pinimg.com/originals/a5/ce/7c/a5ce7cb72cd19f4f7e66858037f4af42.jpg"},
+                        {cssId:"size",id:3,name:"Suraj3",subject:"Biology",imageUrl:"https://i.pinimg.com/originals/a5/ce/7c/a5ce7cb72cd19f4f7e66858037f4af42.jpg"},
+                        {id:4,name:"Suraj4",subject:"Physics",imageUrl:"https://i.pinimg.com/originals/a5/ce/7c/a5ce7cb72cd19f4f7e66858037f4af42.jpg"},
+                        {id:5,name:"Suraj5",subject:"English",imageUrl:"https://i.pinimg.com/originals/a5/ce/7c/a5ce7cb72cd19f4f7e66858037f4af42.jpg"},
+                        {id:6,name:"Suraj6",subject:"Chemistry",imageUrl:"https://i.pinimg.com/originals/a5/ce/7c/a5ce7cb72cd19f4f7e66858037f4af42.jpg",},
+                        {id:7,name:"Suraj7",subject:"Physics",imageUrl:"https://i.pinimg.com/originals/a5/ce/7c/a5ce7cb72cd19f4f7e66858037f4af42.jpg"},
+                        {id:8,name:"Suraj8",subject:"Biology",imageUrl:"https://i.pinimg.com/originals/a5/ce/7c/a5ce7cb72cd19f4f7e66858037f4af42.jpg"},
+                        {id:9,name:"Suraj9",subject:"Physics",imageUrl:"https://i.pinimg.com/originals/a5/ce/7c/a5ce7cb72cd19f4f7e66858037f4af42.jpg"},
+                        {id:10,name:"Suraj10",subject:"English",imageUrl:"https://i.pinimg.com/originals/a5/ce/7c/a5ce7cb72cd19f4f7e66858037f4af42.jpg"},
+                        {id:11,name:"Suraj11",subject:"Chemistry",imageUrl:"https://i.pinimg.com/originals/a5/ce/7c/a5ce7cb72cd19f4f7e66858037f4af42.jpg",},
+                        {id:12,name:"Suraj12",subject:"Physics",imageUrl:"https://i.pinimg.com/originals/a5/ce/7c/a5ce7cb72cd19f4f7e66858037f4af42.jpg"},
+                        {id:13,name:"Suraj13",subject:"Biology",imageUrl:"https://i.pinimg.com/originals/a5/ce/7c/a5ce7cb72cd19f4f7e66858037f4af42.jpg"},
+                        {id:14,name:"Suraj14",subject:"Physics",imageUrl:"https://i.pinimg.com/originals/a5/ce/7c/a5ce7cb72cd19f4f7e66858037f4af42.jpg"},
+                        {id:15,name:"Suraj15",subject:"English",imageUrl:"https://i.pinimg.com/originals/a5/ce/7c/a5ce7cb72cd19f4f7e66858037f4af42.jpg"}  ];
 
 class Album extends Component {
     
-    constructor(props){
+    constructor(props){     
         super(props);
         this.state = {
             filteredTeachers : TeacherCards,
@@ -84,57 +41,45 @@ class Album extends Component {
     }
 
     handleSelectorChange(obj){
-        console.log("handlechange" , obj);
-        
+
         obj.selectedSubject && this.setState({
             filteredTeachers :TeacherCards.filter(e => e.subject === obj.selectedSubject)
-        },()=>console.log(this.state));
+        });
         
     }
 
     render(){
-        const { classes } = this.props;
-        console.log("Search2",this.props);
+    
         let selectedData = {};
         selectedData.selectedCity = this.props.selectedCity
         selectedData.selectedLocality = this.props.selectedLocality
         selectedData.selectedSubject = this.props.selectedSubject
-
+        selectedData.selectedClass = this.props.selectedClass
         return (
             <React.Fragment>
             <CssBaseline />
-            <AppBar position="static" className={classes.appBar}>
-                <Toolbar>
-                <CameraIcon className={classes.icon} />
-                <Typography variant="h6" color="inherit" noWrap>
-                    Hello
-                </Typography>
-                </Toolbar>  
-            </AppBar>
             <main>
-                {/* Hero unit */}
-                <div className={classes.heroUnit}>
-                <div className={classes.heroContent}>
+                <div id='searchSelectorContainer'>
                     <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
-                    Main layout
+                        Search 
                     </Typography>
-                    <div className={classes.heroButtons}>
+                    <div>
                         <SearchSelectors {...selectedData} showResults handleSelectorChange={this.handleSelectorChange.bind(this)}/>
                     </div>
                 </div>
-                </div>
-                <div className={classNames(classes.layout, classes.cardGrid)}>
-                {/* End hero unit */}
-                <Grid container spacing={40}>
+
+                <div id='searchResultsContainer'>
                     {this.state.filteredTeachers.map(card => (
-                    <Grid item key={card.id} sm={6} md={4} lg={3}>
-                        <Card className={classes.card}>
+                    <div className='teacherCard' key={card.id} id={card.cssId}>
+                        <Card >
                         <CardMedia
-                            className={classes.cardMedia}
-                            image={card.imageUrl}
-                            title="Image title"
+                            component='img'
+                            src = {card.imageUrl}
+                            alt ='teacher'
+                            height = "175"
+                            width = "200"
                         />
-                        <CardContent className={classes.cardContent}>
+                        <CardContent>
                             <Typography gutterBottom variant="h5" component="h2">
                             {card.name}
                             </Typography>
@@ -148,18 +93,14 @@ class Album extends Component {
                             </Button>
                         </CardActions>
                         </Card>
-                    </Grid>
+                    </div>
                     ))}
-                </Grid>
                 </div>
+
             </main>
             </React.Fragment>
         );
     }
 }
 
-Album.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-export default withStyles(styles)(Album);
+export default Album;
