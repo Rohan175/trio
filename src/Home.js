@@ -40,13 +40,14 @@ import Twitter from './images/twitter.svg';
 
 import SearchBar from './components/SearchBar';
 import Contact from './components/Contact';
+import ThankYou from './components/thankYou';
 
 const styles = (theme) => ({
     root: {
         overflowX: 'hidden'
     },
     searchBlock: {
-        paddingTop: '100px',
+        paddingTop: '75px',
         paddingBottom:  '70px',
         display: 'flex',
         height: '400px',
@@ -239,19 +240,39 @@ const styles = (theme) => ({
 class Home extends Component {
 
     state = {
-        email: "",
-        description: ""
+        ContactFormSubmitted : false,
+        ContactBtnText : 'Send',
     }
 
-    handleChange = name => event => {
-        this.setState({
-            [name]: event.target.value,
-        });
-    };
-
     handleFetch(obj){
-        console.log('home');
+        
         console.log(obj);
+        
+        this.setState({ContactBtnText : 'Sending..'});
+        const loadingAnimation = setTimeout(() => { 
+            this.setState({ContactBtnText : 'Sending...'});
+        }, 500);
+
+        const loadingAnimation2 = setTimeout(() => { 
+            this.setState({ContactBtnText : 'Sending.....'});
+        }, 1000);
+
+        let url = 'https://script.google.com/macros/s/AKfycbzmpiwLvqkMazpL_xBGN7qO0luaWq77b3quhU4WBPH86ePUXf8/exec?';
+        for(let d in obj){
+            url += d + '=' + obj[d] + '&';
+        }
+
+        fetch(url)
+        .then((user) => {
+            console.log(user);
+            clearTimeout(loadingAnimation);
+            clearTimeout(loadingAnimation2);
+            this.setState({ContactFormSubmitted : true});
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+
     }
 
     componentDidMount = () => {
@@ -271,7 +292,7 @@ class Home extends Component {
             <div className={classes.root}>
                 <div className={classes.searchBlock} ref={(section) => { setRef('searchBlock', section); }}>
                     <div className={classes.content}>
-                        <Typography variant="display1" style={{color: 'white'}}>SEARCH FOR TUTOR</Typography>
+                        <Typography variant="display1" style={{color: 'white',paddingBottom:'25px'}}>SEARCH FOR TUTOR</Typography>
                         <SearchBar />
                     </div>  
                 </div>
@@ -448,7 +469,10 @@ class Home extends Component {
 
                                 </Grid>
                                 <Grid item sm={4} xs={12} className={classes.cardWrapper}>
-                                                <Contact handleFetch = {this.handleFetch.bind(this)}/>
+                                    {!this.state.ContactFormSubmitted 
+                                    ? (<Contact handleFetch = {this.handleFetch.bind(this)} buttonText = {this.state.ContactBtnText}/>) 
+                                    : (<ThankYou/>)}
+                                                
                                 </Grid>
                             </Grid>
                         </Grid>

@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
-
+import Paper from '@material-ui/core/Paper';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -17,7 +16,8 @@ const styles = (theme) => ({
         textAlign: 'center'
     },
     cards: {
-        margin: 'auto'
+        margin: 'auto',
+        padding : '25px'
     },
  
     contactBlock: {
@@ -52,19 +52,14 @@ class Contact extends Component {
         description: "",
         name : "",
         number : "",
-        errors : {contact : [false,"Enter a phone number"],
+        errors : {contact : [false,"Enter a valid phone number"],
                  name : [false,"Enter a name"],
-                 email : [false,"Enter a Email address"]
+                 email : [false,"Enter a valid Email address"]
         },
     }
 
     static defaultProps = {
-        selectedData : {    
-            selectedCity : '-',
-            selectedLocality : '-',
-            selectedSubject : '-',
-            selectedClass : '-',
-        }
+        buttonText : 'Send'
      };
 
     handleChange = name => event => {
@@ -74,32 +69,31 @@ class Contact extends Component {
     };
 
     handleSendClick() {
-
-        if(!(this.state.name && this.state.number && this.state.email)){
-            let errorName;
-            if(!(this.state.name)){
-                errorName = 'name';
-            }else if(!(this.state.number)){
-                errorName = 'contact';
-            }else if (!this.state.email){
-                errorName = 'email';
-            }
-
+        console.log(this.state);
+        let errorName;
+        let reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+        if(!(this.state.name)){
+            errorName = 'name';
+        }else if(!this.state.number || this.state.number.length != 10){
+            errorName = 'contact';
+        }else if (!this.state.email || !(reg.test(this.state.email))){
+            console.log('here');
+            errorName = 'email';
+        }
+        
+        if(errorName){
             this.setState((oldState) => {
                 console.log(oldState,errorName);
                 
                 for(let key in oldState.errors){
-                   oldState.errors[key][0] = false
+                    oldState.errors[key][0] = false
                 }
-
+    
                 oldState.errors[errorName][0] = true;
                 return {errors : oldState.errors}
             });
-
+    
         }else{
-
-            let handleFetch = this.props.handleFetch;
-
             this.setState((oldState) => {
                 console.log(oldState);
                 
@@ -108,28 +102,9 @@ class Contact extends Component {
                 }
                 return {errors : oldState.errors}
 
-            },() => handleFetch({loading : true}));
-
-
-            let selectedData = this.props.selectedData;
-            let url = 'https://script.google.com/macros/s/AKfycbzmpiwLvqkMazpL_xBGN7qO0luaWq77b3quhU4WBPH86ePUXf8/exec?'
-            let data = {Name: this.state.name, Contact: this.state.number, Email: this.state.email, Description : this.state.description,
-                        City : selectedData.selectedCity, Locality : selectedData.selectedLocality, Class : selectedData.selectedClass, Subject : selectedData.selectedSubject};
-            for(let d in data){
-                url += d + '=' + data[d] + '&';
-            }
-
-            console.log(selectedData, url);
-            
-
-            fetch(url)
-            .then((user) => {
-                console.log(user);
-                handleFetch({loaded : true});
-            })
-            .catch((error) => {
-                console.error(error);
             });
+            let data = {Name: this.state.name, Contact: this.state.number, Email: this.state.email, Description : this.state.description};
+            this.props.handleFetch(data);
         }
     }
 
@@ -139,19 +114,22 @@ class Contact extends Component {
     let { classes } = this.props;
 
     return (
-      <div>
+      <Paper>
         
         <Grid container>
 
                         <div className={classes.cards}>
 
-                        <Grid container spacing={24}>
+                        <Grid container spacing={16}>
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     id="name"
                                     label="Name"
                                     className={classes.textField}
                                     value={this.state.name}
+                                    inputProps={{
+                                        maxLength: 20,
+                                    }}
                                     error = {this.state.errors['name'][0]}
                                     helperText = {this.state.errors['name'][0] && this.state.errors['name'][1]}
                                     onChange={this.handleChange('name')}
@@ -162,7 +140,10 @@ class Contact extends Component {
                                 <TextField
                                     id="phone"
                                     label="Contact Number"
-                                    type="tel"
+                                    type="number"
+                                    inputProps={{
+                                        maxLength: 10,
+                                    }}
                                     error = {this.state.errors['contact'][0]}
                                     helperText = {this.state.errors['contact'][0] && this.state.errors['contact'][1]}
                                     className={classes.textField}
@@ -178,6 +159,9 @@ class Contact extends Component {
                                     type="email"
                                     className={classes.textField}
                                     value={this.state.email}
+                                    inputProps={{
+                                        maxLength: 20,
+                                    }}
                                     error = {this.state.errors['email'][0]}
                                     helperText = {this.state.errors['email'][0] && this.state.errors['email'][1]}
                                     onChange={this.handleChange('email')}
@@ -188,7 +172,10 @@ class Contact extends Component {
                                     id="desc"
                                     label="Description"
                                     multiline
-                                    rows="5"
+                                    rows="4"
+                                    inputProps={{
+                                        maxLength: 500,
+                                    }}
                                     className={classes.textField}
                                     value={this.state.description}
                                     onChange={this.handleChange('description')}
@@ -196,13 +183,11 @@ class Contact extends Component {
                             </Grid>
                         </Grid>
                             <br /><br />
-                        <Button variant="raised" className={classes.Button} onClick={this.handleSendClick.bind(this)}>Send</Button>
-
-                            
+                        <Button variant="contained" className={classes.Button} onClick={this.handleSendClick.bind(this)}>{this.props.buttonText}</Button>
                         </div>
                     </Grid>
 
-      </div>
+      </Paper>
     )
   }
 }
